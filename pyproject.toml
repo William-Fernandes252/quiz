@@ -18,6 +18,8 @@ mypy = "^1.8.0"
 black = "^23.12.1"
 django-stubs = "^4.2.7"
 isort = "^5.13.2"
+flake8 = "^7.0.0"
+flake8-docstrings = "^1.7.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.4"
@@ -26,6 +28,12 @@ pytest-cov = "^4.1.0"
 pytest-mock = "^3.12.0"
 factory-boy = "^3.3.0"
 faker = "^22.2.0"
+
+[tool.mypy]
+plugins = "mypy_django_plugin.main"
+
+[tool.django-stubs]
+django_settings_module = "quiz.settings"
 
 [tool.black]
 line-length = 88
