@@ -4,9 +4,26 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, RedirectView
 
 from . import forms, models
+
+
+class IndexView(RedirectView):
+    pattern_name = "questions:useranswer-create-for-question"
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse(
+            self.pattern_name,
+            kwargs={
+                "question_id": models.Question.objects.questions_not_answered_by_the_user(
+                    self.request.user
+                )
+                .first()
+                .pk
+            },
+        )
 
 
 class UserAnswerCreateForQuestionView(CreateView):
@@ -81,11 +98,11 @@ class UserResultView(ListView):
 
     def get(self, request, *args, **kwargs):
         if self.get_queryset().count() != models.Question.objects.count():
-            return redirect("questions:useranswer-create-for-question", question_id=1)
+            return redirect("questions:index")
         return super().get(request, *args, **kwargs)
 
 
 class ResetUserAnswersView(View):
     def post(self, request, *args, **kwargs):
         models.UserAnswer.objects.filter(user=self.request.user).delete()
-        return redirect("questions:useranswer-create-for-question", question_id=1)
+        return redirect("questions:index")
