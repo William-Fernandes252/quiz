@@ -30,9 +30,11 @@ class UserAnswerCreateForQuestionView(CreateView):
         return self.form_class(question, **self.get_form_kwargs())
 
     def get_success_url(self) -> str:
-        question_id = self.kwargs["question_id"]
-        if (models.Question.objects.count() + 1) == question_id:
+        if models.Question.objects.questions_not_answered_by_the_user(
+            self.request.user
+        ).exists():
             return reverse("questions:user-result")
+        question_id = self.kwargs["question_id"]
         return reverse(
             "questions:useranswer-create-for-question",
             kwargs={"question_id": question_id + 1},
