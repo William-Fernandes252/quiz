@@ -3,7 +3,7 @@ from django.db import models
 
 
 class QuestionManager(models.Manager):
-    def questions_not_answered_by_the_user(self, user):
+    def not_answered_by_the_user(self, user):
         """Return questions not answered by the user."""
         return self.exclude(user_answers__user=user)
 

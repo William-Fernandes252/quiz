@@ -17,7 +17,7 @@ class IndexView(RedirectView):
         return reverse(
             self.pattern_name,
             kwargs={
-                "question_id": models.Question.objects.questions_not_answered_by_the_user(
+                "question_id": models.Question.objects.not_answered_by_the_user(
                     self.request.user
                 )
                 .first()
@@ -47,7 +47,7 @@ class UserAnswerCreateForQuestionView(CreateView):
         return self.form_class(question, **self.get_form_kwargs())
 
     def get_success_url(self) -> str:
-        if not models.Question.objects.questions_not_answered_by_the_user(
+        if not models.Question.objects.not_answered_by_the_user(
             self.request.user
         ).exists():
             return reverse("questions:user-result")
@@ -62,9 +62,7 @@ class UserAnswerCreateForQuestionView(CreateView):
             question = models.Question.objects.get(pk=self.kwargs["question_id"])
         except models.Question.DoesNotExist:
             if (
-                models.Question.objects.questions_not_answered_by_the_user(
-                    request.user
-                ).count()
+                models.Question.objects.not_answered_by_the_user(request.user).count()
                 > 0
             ):
                 messages.error(request, "Questão não encontrada.")
