@@ -61,9 +61,9 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["crispy_forms", "crispy_bootstrap5"]
+THIRD_PARTY_APPS = ["crispy_forms", "crispy_bootstrap5", "computedfields"]
 
-LOCAL_APPS = []
+LOCAL_APPS = ["users", "questions"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -100,6 +100,17 @@ TEMPLATES = [
     },
 ]
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+# Messages
+
+MESSAGE_TAGS = {message_constants.ERROR: "danger"}
+
+
+# WSGI configuration.
 
 WSGI_APPLICATION = "quiz.wsgi.application"
 
@@ -129,6 +140,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Authentication
+
+AUTH_USER_MODEL = "users.User"
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -151,3 +167,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Computed fields in admin page
+
+COMPUTEDFIELDS_ADMIN = True
