@@ -30,7 +30,7 @@ class UserAnswerCreateForQuestionView(CreateView):
         return self.form_class(question, **self.get_form_kwargs())
 
     def get_success_url(self) -> str:
-        if models.Question.objects.questions_not_answered_by_the_user(
+        if not models.Question.objects.questions_not_answered_by_the_user(
             self.request.user
         ).exists():
             return reverse("questions:user-result")
