@@ -1,0 +1,28 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+
+services:
+  django:
+    build: &django-build
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    depends_on:
+      - postgres
+    volumes: &django-volumes
+      - .:/app:z
+    env_file:
+      - .env
+    ports:
+      - '8010:8000'
+    command: /start
+
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:Z
+    env_file:
+      - .env
+    expose:
+      - 5432
